@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ok Shoppy Store</title>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0a7cff"/>
+  <link rel="icon" href="assets/icon-192.png"/>
+  <link rel="apple-touch-icon" href="assets/icon-192.png"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+    }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <img src="assets/logo.svg" alt="Ok Shoppy Store" class="logo"/>
+    <div class="top-actions">
+      <input id="search" type="search" placeholder="सर्च करें (केबल, चार्जर, ई‑बुक)…"/>
+      <button id="btn-cart" aria-label="Cart">🛒<span id="cart-count">0</span></button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="home">होम</button>
+    <button class="tab" data-tab="products">प्रोडक्ट्स</button>
+    <button class="tab" data-tab="repairs">रिपेयरिंग</button>
+    <button class="tab" data-tab="offers">ऑफर्स</button>
+    <button class="tab" data-tab="about">हमारे बारे में</button>
+  </nav>
+
+  <main>
+    <section id="home" class="tabview active">
+      <div class="hero">
+        <h1>Ok Shoppy Store</h1>
+        <p>मोबाइल एसेसरीज • ई‑बुक्स • मोबाइल/लैपटॉप रिपेयर</p>
+        <a class="cta" href="#" data-goto="products">शॉपिंग शुरू करें</a>
+      </div>
+
+      <div class="grid features">
+        <div class="card"><h3>तेज़ डिलीवरी</h3><p>उन्नाव और आसपास के क्षेत्रों में होम‑डिलीवरी*</p></div>
+        <div class="card"><h3>विश्वसनीय रिपेयर</h3><p>डिस्प्ले/कनेक्टर/चार्जिंग‑पोर्ट रिपेयरिंग</p></div>
+        <div class="card"><h3>सिक्योर पेमेंट</h3><p>UPI/क्यूआर के ज़रिए पेमेंट</p></div>
+      </div>
+
+      <h2>केटेगरी</h2>
+      <div class="chips" id="home-cats"></div>
+    </section>
+
+    <section id="products" class="tabview">
+      <div class="filterbar">
+        <div class="chips" id="cat-chips"></div>
+        <select id="sort">
+          <option value="pop">लोकप्रिय</option>
+          <option value="price-asc">कीमत: कम से ज़्यादा</option>
+          <option value="price-desc">कीमत: ज़्यादा से कम</option>
+        </select>
+      </div>
+      <div id="product-list" class="grid"></div>
+    </section>
+
+    <section id="repairs" class="tabview">
+      <h2>रिपेयरिंग सर्विस बुक करें</h2>
+      <form id="repair-form" class="form">
+        <label>डिवाइस टाइप
+          <select name="device">
+            <option>मोबाइल</option><option>लैपटॉप</option><option>टैबलेट</option>
+          </select>
+        </label>
+        <label>ब्रांड/मॉडल <input name="model" required placeholder="उदा: Redmi Note 12"/></label>
+        <label>समस्या का विवरण <textarea name="issue" required placeholder="उदा: स्क्रीन टूटी है / चार्ज नहीं हो रहा"></textarea></label>
+        <label>आपका नाम <input name="name" required/></label>
+        <label>मोबाइल नंबर <input name="phone" required inputmode="tel" pattern="[0-9]{10}"/></label>
+        <div class="row">
+          <button type="submit">व्हाट्सएप पर भेजें</button>
+          <button type="button" id="call-us">कॉल करें</button>
+        </div>
+        <small>*निरीक्षण/डायग्नॉस्टिक चार्ज लागू हो सकता है।</small>
+      </form>
+    </section>
+
+    <section id="offers" class="tabview">
+      <h2>चल रही ऑफ़र्स</h2>
+      <ul id="offer-list" class="offers"></ul>
+    </section>
+
+    <section id="about" class="tabview">
+      <h2>हमारे बारे में</h2>
+      <p><strong>Ok Shoppy Store</strong> — उन्नाव, उत्तर प्रदेश। मोबाइल एसेसरीज, ई‑बुक बिक्री और मोबाइल/लैपटॉप रिपेयरिंग की भरोसेमंद शॉप।</p>
+      <ul class="contact">
+        <li>फोन: <a id="phone-link" href="#">—</a></li>
+        <li>व्हाट्सएप: <a id="wa-link" href="#">—</a></li>
+        <li>UPI ID: <span id="upi-id">—</span></li>
+        <li>पता: <span id="address">—</span></li>
+      </ul>
+      <div class="row">
+        <a class="btn" id="btn-directions" href="#">लोकेशन</a>
+        <a class="btn" id="btn-share" href="#">शेयर करें</a>
+      </div>
+      <p class="muted">ऐप को होम स्क्रीन पर जोड़ें—मेन्यू › "Add to Home screen"</p>
+    </section>
+  </main>
+
+  <div id="cart-drawer" class="drawer">
+    <div class="drawer-head">
+      <h3>माई कार्ट</h3>
+      <button id="close-cart">✕</button>
+    </div>
+    <div id="cart-items"></div>
+    <div class="drawer-foot">
+      <div class="line"><span>सबटोटल</span><strong id="subtotal">₹0</strong></div>
+      <button id="checkout">Checkout (UPI)</button>
+      <small>पेमेंट के बाद स्क्रीनशॉट/Order ID व्हाट्सएप करें।</small>
+    </div>
+  </div>
+
+  <footer class="foot">
+    © <span id="year"></span> Ok Shoppy Store
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
